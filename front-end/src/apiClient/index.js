@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAuthToken } from "../helper/helper";
 
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "https://online-fruit-shop-khaki.vercel.app/api",
+  baseURL: process.env.REACT_APP_API_BASE_URL || "https://online-fruit-shop-khaki.vercel.app/api/",
   headers: {
     "Content-Type": "application/json",
   },
