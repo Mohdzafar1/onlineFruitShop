@@ -15,7 +15,7 @@ const PORT=8080 || process.env.PORT
 
 
 var corsOptions = {
-  origin: ["https://online-fruit-shop-khaki.vercel.app"],
+  origin: ["https://online-fruit-shop-frontend.vercel.app"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   optionsSuccessStatus: 200
 };
