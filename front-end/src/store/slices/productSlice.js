@@ -20,7 +20,6 @@ const productSlice=createSlice({
          getAllFilterProducts(state,action){
             state.productFilterAll=action.payload
          }
-
     }
 })
 

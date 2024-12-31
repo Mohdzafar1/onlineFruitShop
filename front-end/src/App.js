@@ -7,7 +7,7 @@ import Login from './pages/auth/Login';
 import PrivateRoute from './components/PrivateRoute';
 import { getAuthToken } from './helper/helper';
 import Profile from './pages/userProfile/Profile';
-import Cart from './components/Cart';
+
 import AdminPanel from './admin/AdminPanel';
 
 function App() {
@@ -37,15 +37,7 @@ function App() {
               </PrivateRoute>
             }
           />
-           <Route
-            path="/cart"
-            element={
-              <PrivateRoute>
-                <Navbar /> 
-                <Cart/>
-              </PrivateRoute>
-            }
-          />
+          
           {/* admin start */}
           <Route
             path="/admin"

@@ -52,7 +52,7 @@ const Home = () => {
                     <div className="flex-1 overflow-y-auto">
                       <Filter />
                     </div>
-                    <div className="flex-shrink-0 px-4 py-4 flex justify-end">
+                    {/* <div className="flex-shrink-0 px-4 py-4 flex justify-end">
                       <button
                         type="button"
                         className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -60,7 +60,7 @@ const Home = () => {
                       >
                         Close
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

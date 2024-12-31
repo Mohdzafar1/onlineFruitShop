@@ -1,53 +1,73 @@
 import { useEffect, useState } from 'react';
 import { FaFilter, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllFilterProducts, getAllProducts } from '../store/slices/productSlice';
+import { getAllFilterProducts} from '../store/slices/productSlice';
 
 const Filter = () => {
+  const dispatch= useDispatch()
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState([]); // Track selected filters
-  const [selectedPriceRange, setSelectedPriceRange] = useState([0, Infinity]); // Default to show all prices
   const products = useSelector((state) => state.products?.productAll || []);
-  const dispatch = useDispatch();
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
-console.log("selectedPriceRanges",selectedPriceRanges);
-  const handleCate = (e) => {
-    const { value, checked } = e.target;
-
-    // Update selected filters
-    setSelectedFilters((prevFilters) =>
-      checked ? [...prevFilters, value] : prevFilters.filter((filter) => filter !== value)
-    );
-  };
+  const [filteredProducts, setFilteredProducts] = useState(products);
  
-  const handlePriceFilter = (e, min, max) => {
-    const { checked } = e.target;
-  
-    setSelectedPriceRanges((prev) => {
-      if (checked) {
-        // Add the range if it's checked
-        return [...prev, { min, max }];
-      } else {
-        // Remove the range if it's unchecked
-        return prev.filter(
-          (range) => range.min !== min || range.max !== max
-        );
-      }
-    });
+  // Filter states
+  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState([]);
+
+  const handleSubcategoryFilter = (e) => {
+    const { value, checked } = e.target;
+    let updatedSubcategories = [...selectedSubcategories];
+
+    if (checked) {
+      updatedSubcategories.push(value);
+    } else {
+      updatedSubcategories = updatedSubcategories.filter((item) => item !== value);
+    }
+
+    setSelectedSubcategories(updatedSubcategories);
   };
-  
+
+  const handlePriceFilter = (e) => {
+    const { value, checked } = e.target;
+    let updatedPriceRange = [...selectedPriceRange];
+
+    if (checked) {
+      updatedPriceRange.push(value);
+    } else {
+      updatedPriceRange = updatedPriceRange.filter((item) => item !== value);
+    }
+
+    setSelectedPriceRange(updatedPriceRange);
+  };
 
   useEffect(() => {
-    let filteredProducts =
-      selectedFilters.length >  0
-        ? products.filter((product) => selectedFilters.includes(product.subCategory))
-        : products;
-  
-  
+    const applyFilters = () => {
+      let result = products;
 
-    dispatch(getAllFilterProducts(filteredProducts));
-  }, [selectedFilters, products, dispatch]);
-  
+      // Filter by subcategory
+      if (selectedSubcategories.length > 0) {
+        result = result.filter((product) =>
+          selectedSubcategories.includes(product.subCategory)
+        );
+      }
+
+      // Filter by price range
+      if (selectedPriceRange.length > 0) {
+        result = result.filter((product) => {
+          return selectedPriceRange.some((range) => {
+            const [min, max] = range.split("-").map(Number);
+            return product.price >= min && product.price <= max;
+          });
+        });
+      }
+
+      setFilteredProducts(result);
+      dispatch(getAllFilterProducts(result))
+    };
+
+    applyFilters();
+  }, [selectedSubcategories, selectedPriceRange, products]);
+
+
   return (
     <div>
       {/* Desktop Filter */}
@@ -57,7 +77,13 @@ console.log("selectedPriceRanges",selectedPriceRanges);
             <button className="px-4 py-1.5 bg-red-500 text-white text-sm rounded">
               Filter
             </button>
-            <button className="text-gray-600 text-sm hover:text-gray-900">
+            <button className="text-gray-600 text-sm hover:text-gray-900"
+            onClick={() => {
+                setSelectedSubcategories([]);
+                setSelectedPriceRange([]);
+                setFilteredProducts(products);
+              }}
+            >
               Clear All
             </button>
           </div>
@@ -75,14 +101,22 @@ console.log("selectedPriceRanges",selectedPriceRanges);
 
           {/* Subcategories */}
           <div className="border-b pb-4">
-            <h3 className="font-medium mb-2">Subcategories</h3>
+            <h3 className="font-medium mb-2">Subcategories1</h3>
             <div className="space-y-2">
-              {products.map((item) => (
-                <label key={item} className="flex items-center space-x-2">
-                  <input type="checkbox" className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300" name="subCategory"  value={item.subCategory} onChange={handleCate}/>
-                  <span className="text-sm text-gray-600">{item.subCategory}</span>
-                </label>
-              ))}
+            {Array.from(new Set(products.map((item) => item.subCategory))).map(
+                (subCategory) => (
+                  <label key={subCategory} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300"
+                      value={subCategory}
+                      onChange={handleSubcategoryFilter}
+                      checked={selectedSubcategories.includes(subCategory)}
+                    />
+                    <span className="text-sm text-gray-600">{subCategory}</span>
+                  </label>
+                )
+              )}
             </div>
           </div>
 
@@ -99,23 +133,25 @@ console.log("selectedPriceRanges",selectedPriceRanges);
           <div className="border-b pb-4">
             <h3 className="font-medium mb-2">Price</h3>
             <div className="space-y-2">
-  {[
-    { label: 'Less than Rs.50', min: 0, max: 50 },
-    { label: 'Rs.51 to Rs.100', min: 51, max: 100 },
-    { label: 'Rs.101 to Rs.200', min: 101, max: 200 },
-    { label: 'Rs.201 to Rs.500', min: 201, max: 500 },
-    { label: 'Rs.501 to Rs.999', min: 501, max: 999 },
-    { label: 'Rs.1000 & Above', min: 1000, max: Infinity },
-  ].map(({ label, min, max }) => (
-    <label key={label} className="flex items-center space-x-2">
-      <input
-        type="checkbox"
-        className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300"
-        onChange={(e) => handlePriceFilter(e,min, max)}
-      />
-      <span className="text-sm text-gray-600">{label}</span>
-    </label>
-  ))}
+            {[
+                { label: "Less than Rs.50", range: "0-50" },
+                { label: "Rs.51 to Rs.100", range: "51-100" },
+                { label: "Rs.101 to Rs.200", range: "101-200" },
+                { label: "Rs.201 to Rs.500", range: "201-500" },
+                { label: "Rs.501 to Rs.999", range: "501-999" },
+                { label: "Rs.1000 & Above", range: "1000-Infinity" },
+              ].map(({ label, range }) => (
+                <label key={range} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300"
+                    value={range}
+                    onChange={handlePriceFilter}
+                    checked={selectedPriceRange.includes(range)}
+                  />
+                  <span className="text-sm text-gray-600">{label}</span>
+                </label>
+              ))}
 </div>
 
           </div>
@@ -169,7 +205,9 @@ console.log("selectedPriceRanges",selectedPriceRanges);
             onClick={() => setIsMobileOpen(true)}
             className="bg-red-500 text-white p-4 rounded-full shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
-            <FaFilter className="h-6 w-6" />
+            <FaFilter className="h-6 w-6"
+             onClick={() => setIsMobileOpen(true)}
+              />
           </button>
         </div>
 
@@ -206,7 +244,7 @@ console.log("selectedPriceRanges",selectedPriceRanges);
                         <div className="space-y-2">
                         {products.map((item) => (
                         <label key={item} className="flex items-center space-x-2">
-                          <input type="checkbox" className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300" name="subCategory"  value={item.subCategory} onChange={handleCate}/>
+                          <input type="checkbox" className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300" name="subCategory" />
                           <span className="text-sm text-gray-600">{item.subCategory}</span>
                         </label>
                       ))}
@@ -237,7 +275,7 @@ console.log("selectedPriceRanges",selectedPriceRanges);
                             <label key={range} className="flex items-center space-x-2">
                               <input type="checkbox" className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300" 
                                    name="price"
-                               onChange={() => handlePriceFilter(...range)}
+                              
                               />
                               <span className="text-sm text-gray-600">{range}</span>
                             </label>
