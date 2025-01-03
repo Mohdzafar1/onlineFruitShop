@@ -35,5 +35,9 @@ export const getAllProduct=async()=>{
   const response=await apiClient.get(`getProduct`)
   console.log("response",response)
   return response.data?.productList
+}
 
+export const addProduct=async(formData)=>{
+  const response=await apiClient.post(`addproduct`,formData)
+  return response.data
 }

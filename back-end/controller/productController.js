@@ -7,14 +7,14 @@ const Product = require("../model/productModel");
 exports.addProduct = async (req, res) => {
     try {
         const { name, price, weights, category, subCategory } = req.body;
-
-        let productImageUrl = null;
-        if (req.files && req.files.product_image && req.files.product_image[0]) {
-            productImageUrl = `/images/${req.files.product_image[0].filename}`;
+         console.log("product",req.body)
+         let productImageUrl=null
+         console.log("asdsad",req.file)
+         if (req.file) {
+            productImageUrl = `/images/${req.file.filename}`;
         } else {
-            return res.status(400).json({ message: "Product image is required" });
+            return res.status(400).json({ message: "Product image is required" })
         }
-
         
          // if (!product_name || !product_price || !product_weights || !product_category || !product_subCategory) {
         //     return res.status(400).json({ message: "All fields are required." });

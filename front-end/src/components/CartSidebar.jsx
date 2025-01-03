@@ -3,7 +3,7 @@ import { BsClock } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
-import { deleteProductReducer } from "../store/slices/cartSlice";
+import { deleteProductReducer, updateQuantity } from "../store/slices/cartSlice";
 
 
 const CartSidebar = ({ handleCloseCart, onUpdateQuantity }) => {
@@ -19,15 +19,12 @@ const CartSidebar = ({ handleCloseCart, onUpdateQuantity }) => {
     
     // Update item quantity
     const handleQuantityChange = (productId, newQty) => {
-    console.log("newQty",newQty,productId)
-    if (newQty < 1) return;
-
-    const updatedCart = cartItems.map((item) =>
-      item._id === productId ? { ...item, qty: newQty } : item
-  );
-  console.log("updatedCart",updatedCart)
-  setCartItems(updatedCart);
-  };
+      if (newQty < 1) {
+        dispatch(deleteProductReducer(productId));
+      } else {
+        dispatch(updateQuantity({ productId, qty: newQty }));
+      }
+    };
 
   // Calculate totals
   const itemsTotal = cartItems.reduce(
@@ -91,9 +88,9 @@ const CartSidebar = ({ handleCloseCart, onUpdateQuantity }) => {
           <div className="flex items-center justify-between mt-2">
             <div>
               <span className="font-bold">₹{item.price}</span>
-              {(item.price + 10) > item.price && (
+              {(Number(item.price) + 10) > item.price && (
                 <span className="text-sm text-gray-500 line-through ml-2">
-                  ₹{item.price + 10}
+                  ₹{Number(item.price) + 15}
                 </span>
               )}
             </div>

@@ -14,6 +14,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for hamburger menu
   const[cartSide,setCartSide]=useState(false)
   const history = useNavigate();
+  const cartData = useSelector((state) => state.carts?.cartProduct || []);
+
  
    const handleCloseCart=()=>{
     setCartSide(false)
@@ -107,7 +109,7 @@ const Navbar = () => {
               <button className="p-2 hover:bg-gray-100 rounded-full relative">
                 <FaShoppingCart className="h-6 w-6 text-gray-600" onClick={handleOpenCart}/>
                 <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  0
+                  {cartData.length}
                 </span>
               </button>
               <button

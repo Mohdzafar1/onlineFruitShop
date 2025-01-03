@@ -5,7 +5,7 @@ const upload=require("../middleware/multerConfig")
 
 
 
-router.post("/addproduct",upload.fields([{name:"product_image",maxCount:1}]),addProduct)
+router.post("/addproduct",upload.single('product_image'),addProduct)
 router.get("/getProduct",getProduct)
 
 

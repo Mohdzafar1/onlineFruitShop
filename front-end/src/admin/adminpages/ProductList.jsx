@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { getAllProduct } from '../../apiClient/endPoint';
+import AddProduct from './dialogBox/AddProduct';
 
 const ProductList = () => {
 
   const [products, setProduct] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
 
  console.log("products654",products)
   const getAllProductList = async () => {
@@ -23,11 +25,12 @@ const ProductList = () => {
   }, []);
 
   return (
-    <div className="px-0 sm:px-8">
+    <>
+       <div className="px-0 sm:px-8">
       <div className="py-3">
       <div className="mb-4 flex justify-between items-center">
   <h2 className="text-2xl font-semibold leading-tight">Product List</h2>
-  <button className="px-4 py-2 bg-gray-500 text-white font-medium text-sm rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+  <button onClick={() => setModalOpen(true)} className="px-4 py-2 bg-gray-500 text-white font-medium text-sm rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
   Add
 </button>
 
@@ -86,8 +89,15 @@ const ProductList = () => {
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
+    {isModalOpen && (
+   <AddProduct setModalOpen={setModalOpen}/>
+      )}
+
+
+    </>
   )
 }
 
