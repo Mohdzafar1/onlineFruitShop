@@ -46,10 +46,10 @@ exports.getProduct =async(req,res)=>{
     try{
      const url = req.protocol + "://" + req.get("host");
     
-     const cachedData=await redisClient.get('getProduct')
-     if(cachedData !=null){
-       return res.status(404).json(JSON.parse(cachedData))
-     }
+    //  const cachedData=await redisClient.get('getProduct')
+    //  if(cachedData !=null){
+    //    return res.status(404).json(JSON.parse(cachedData))
+    //  }
         const productList =await Product.find()
 
         // const totalPrice= await Product.aggregate([
@@ -61,7 +61,7 @@ exports.getProduct =async(req,res)=>{
             img.product_image=`${url}/public${img.product_image}`
         })
        
-        await redisClient.set('getProduct',JSON.stringify(productList),'EX',3600)
+        // await redisClient.set('getProduct',JSON.stringify(productList),'EX',3600)
         return res.status(201).json({message:"add new Product",productList})
    
     }catch(error){
