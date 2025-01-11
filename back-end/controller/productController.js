@@ -1,15 +1,17 @@
 const Product = require("../model/productModel");
+const {Redis} =require("ioredis")
 
 
+const redisClient=new Redis()
 
 
 
 exports.addProduct = async (req, res) => {
     try {
         const { name, price, weights, category, subCategory } = req.body;
-         console.log("product",req.body)
-         let productImageUrl=null
-         console.log("asdsad",req.file)
+      
+         
+        let productImageUrl=null
          if (req.file) {
             productImageUrl = `/images/${req.file.filename}`;
         } else {
@@ -43,13 +45,24 @@ exports.addProduct = async (req, res) => {
 exports.getProduct =async(req,res)=>{
     try{
      const url = req.protocol + "://" + req.get("host");
-        
+    
+     const cachedData=await redisClient.get('getProduct')
+     if(cachedData !=null){
+       return res.status(404).json(JSON.parse(cachedData))
+     }
         const productList =await Product.find()
+
+        // const totalPrice= await Product.aggregate([
+        //                       {$match:{name:"Red mongo"}}, 
+        //                       {$addFields:{price:{$toInt:"$price"}}},
+        //                       {$group:{_id:"id",totalPrice:{$sum:"$price"}}}])
      
         productList.forEach((img)=>{
             img.product_image=`${url}/public${img.product_image}`
         })
-    return res.status(201).json({message:"add new Product",productList})
+       
+        await redisClient.set('getProduct',JSON.stringify(productList),'EX',3600)
+        return res.status(201).json({message:"add new Product",productList})
    
     }catch(error){
         console.error(error);
