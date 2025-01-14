@@ -42,33 +42,34 @@ exports.addProduct = async (req, res) => {
 
 
 
-exports.getProduct =async(req,res)=>{
-    try{
-     const url = req.protocol + "://" + req.get("host");
-    
-    //  const cachedData=await redisClient.get('getProduct')
-    //  if(cachedData !=null){
-    //    return res.status(404).json(JSON.parse(cachedData))
-    //  }
-        const productList =await Product.find()
-
-        // const totalPrice= await Product.aggregate([
-        //                       {$match:{name:"Red mongo"}}, 
-        //                       {$addFields:{price:{$toInt:"$price"}}},
-        //                       {$group:{_id:"id",totalPrice:{$sum:"$price"}}}])
-     
-        productList.forEach((img)=>{
-            img.product_image=`${url}/public${img.product_image}`
-        })
-       
-        // await redisClient.set('getProduct',JSON.stringify(productList),'EX',3600)
-        return res.status(201).json({message:"add new Product",productList})
-   
-    }catch(error){
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
+exports.getProduct = async (req, res) => {
+    try {
+      const url = req.protocol + "://" + req.get("host");
+      
+      // Check Redis cache
+      // const cachedData = await redisClient.get('getProduct');
+      // if (cachedData != null) {
+      //   return res.status(200).json(JSON.parse(cachedData)); // Return success status code
+      // }
+  
+      // Fetch products from the database
+      const productList = await Product.find();
+  
+      // Update product image URLs
+      productList.forEach((img) => {
+        img.product_image = `${url}/public${img.product_image}`;
+      });
+  
+      // Cache the data in Redis with a 1-hour expiration
+      // await redisClient.set('getProduct', JSON.stringify(productList), 'EX', 3600);
+  
+      return res.status(200).json({ message: "Products retrieved successfully", productList });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-}
+  };
+  
 
 exports.updateProduct =async(req,res)=>{
     try{
