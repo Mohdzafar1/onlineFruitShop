@@ -11,6 +11,8 @@ export const getAuthToken=()=>{
  export const setCredential = ({email,token}) => {
    if (!token) throw new Error("Token is required");
    localStorage.setItem("email", email);
+  
+
    return true; // Indicate success
  };
  

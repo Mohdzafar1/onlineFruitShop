@@ -37,6 +37,7 @@ const ProductList = () => {
 </div>
 
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+          <div className='max-h-96 overflow-y-auto'>
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
@@ -88,6 +89,7 @@ const ProductList = () => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
 
       </div>

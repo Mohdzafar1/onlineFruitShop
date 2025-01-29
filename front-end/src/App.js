@@ -9,6 +9,7 @@ import { getAuthToken } from './helper/helper';
 import Profile from './pages/userProfile/Profile';
 
 import AdminPanel from './admin/AdminPanel';
+import Register from './pages/auth/Register';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* Private Route */}
           <Route
@@ -37,6 +39,7 @@ function App() {
               </PrivateRoute>
             }
           />
+         
           
           {/* admin start */}
           <Route

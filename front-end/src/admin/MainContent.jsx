@@ -9,9 +9,9 @@ const MainContent = ({activeMenu}) => {
   
   return (
     <div>
-           <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+           <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6 max-h-full">
    
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 ">
               {(activeMenu==="orders") && <OrderList/>}
               {(activeMenu==="users") && <UsersList/>}
               {(activeMenu==="products") && <ProductList/>}

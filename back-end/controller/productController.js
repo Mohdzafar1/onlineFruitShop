@@ -1,24 +1,27 @@
 const Product = require("../model/productModel");
-const {Redis} =require("ioredis")
+// const {Redis} =require("ioredis")
 
 
-const redisClient=new Redis()
+// const redisClient=new Redis()
 
 
 
 exports.addProduct = async (req, res) => {
     try {
-        const { name, price, weights, category, subCategory } = req.body;
+      console.log("Body:", req.body);
+      console.log("File:", req.files);
       
-         
-        let productImageUrl=null
-         if (req.file) {
-            productImageUrl = `/images/${req.file.filename}`;
+        const { name, price, weights, category, subCategory } = req.body;
+        console.log("file",req.files)
+          
+        let productImageUrl;
+         if (req.files) {
+            productImageUrl = `/images/${req.files.filename}`;
         } else {
             return res.status(400).json({ message: "Product image is required" })
         }
-        
-         // if (!product_name || !product_price || !product_weights || !product_category || !product_subCategory) {
+        console.log("body1",)
+         // if (!product_name || !product_price || !product_weights || !product_category || !product_subCategory){
         //     return res.status(400).json({ message: "All fields are required." });
         // }
 

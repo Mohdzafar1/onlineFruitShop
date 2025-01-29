@@ -1,7 +1,7 @@
 import apiClient from "./index"
 
-export const register=async({email,password,phone,name})=>{
-  const response=await apiClient("/register",{email,password,phone,name})
+export const register=async(form)=>{
+  const response=await apiClient.post("register",form)
   console.log("response",response)
   return response
 }
@@ -38,6 +38,7 @@ export const getAllProduct=async()=>{
 }
 
 export const addProduct=async(formData)=>{
+  console.log("asdasdasdsa",formData)
   const response=await apiClient.post(`addproduct`,formData)
   return response.data
 }

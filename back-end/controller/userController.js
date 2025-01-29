@@ -63,7 +63,7 @@ exports.login =async(req,res)=>{
       { expiresIn: '1h' } // Token expiration time
     );
 
-     return res.status(201).json({message:"login successfully",token,status:true,email: existUser.email})
+     return res.status(201).json({message:"login successfully",token,status:true,email: existUser.email,isAdmin:existUser.isAdmin})
 
     }catch(error){
         console.error(error);

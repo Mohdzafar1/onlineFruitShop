@@ -11,7 +11,7 @@ const AddProduct = ({ setModalOpen }) => {
     subCategory: '',
     weights: '',
   });
-
+console.log("formData",formData)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -22,7 +22,7 @@ const AddProduct = ({ setModalOpen }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log("sadsadsad",e.target.files[0])
+    console.log("sadsadsad",e.target.files[0],file)
     if (file) {
         setFormData({
             ...formData,
@@ -36,31 +36,25 @@ const AddProduct = ({ setModalOpen }) => {
   
   
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const form = new FormData();
+  form.append("name", formData.name);
+  form.append("price", formData.price);
+  form.append("category", formData.category);
+  form.append("subCategory", formData.subCategory);
+  form.append("weights", formData.weights);
+  form.append("product_image", formData.product_image); // Send the file object directly
+   console.log("formData321",formData)
   
-    const form = new FormData();
-    form.append("name", formData.name);
-    form.append("price", formData.price);
-    form.append("category", formData.category);
-    form.append("subCategory", formData.subCategory);
-    form.append("weights", formData.weights);
-    form.append("product_image", formData.product_image);
+    const response = await addProduct(formData); // Ensure API is set up to handle multipart/form-data
+    console.log("Response:", response);
+    setModalOpen(false);
   
-    try {
-      const response = await addProduct(form); // Send FormData
-      console.log('Response:', response);
-      setModalOpen(false); // Close modal on success
-    } catch (error) {
-      console.error('Error uploading product:', error);
-    }
-  };
+};
+
   
-  
-  
-  
-  
- 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -97,11 +91,10 @@ const AddProduct = ({ setModalOpen }) => {
               <label className="block text-sm font-medium text-gray-700">Upload Product product_image</label>
               <input
                 type="file"
-  name="product_image"
+  name="product_image" // This name must match the multer field
   accept="image/*"
-                onChange={handleFileChange}
-
-                required
+  onChange={handleFileChange}
+  required
                 className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
             </div>
