@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { login } from '../../apiClient/endPoint';
 import { Link, useNavigate } from 'react-router-dom';
 import { setAuthToken, setCredential } from '../../helper/helper';
+import { showSuccessToast } from '../../helper/toast';
 
 const Login = () => {
  const[form,setForm]=useState({
@@ -26,8 +27,11 @@ const Login = () => {
     setCredential({token,email})
     if(admin==false){
       history("/home")
+     showSuccessToast(resp.message)
+  
     }else{
       history("/admin")
+     showSuccessToast("Welcome to admin")
     }
  
     window.location.reload()

@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { FaBars, FaUserCircle } from 'react-icons/fa'
+import { showSuccessToast } from '../../helper/toast'
+import { useNavigate } from 'react-router-dom'
 
 const Header = ({ activeMenu, setActiveMenu, toggleSidebar }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
+  const history = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -21,6 +24,12 @@ const Header = ({ activeMenu, setActiveMenu, toggleSidebar }) => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen)
   }
+
+   const handleLogout = () => {
+      localStorage.removeItem("Auth_Token");
+      history("/");
+      showSuccessToast("Logout successfully")
+    };
 
   return (
     <header className="bg-white shadow-sm">
@@ -53,7 +62,7 @@ const Header = ({ activeMenu, setActiveMenu, toggleSidebar }) => {
               <a
                 href="#"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => setIsDropdownOpen(false)}
+                onClick={handleLogout}
               >
                 Logout
               </a>

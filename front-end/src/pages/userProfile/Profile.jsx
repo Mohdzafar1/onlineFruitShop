@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { FaCamera } from 'react-icons/fa'
 import { getSingleUser, updateAddress, updateProfile } from '../../apiClient/endPoint'
 import { getCredential } from '../../helper/helper'
+import { showSuccessToast } from '../../helper/toast'
 
 const Profile = () => {
   const email= getCredential()
@@ -23,7 +24,8 @@ const Profile = () => {
     try{
       const data={userId:formData?.id,houseNo:formData?.houseNo,landMark:formData?.landMark,address:formData?.address}
     const resp=await updateAddress(data)
-    console.log("resp987",resp)
+    console.log("resp",resp)
+      showSuccessToast(resp.message)
     }catch(error){
       console.log(error)
     }

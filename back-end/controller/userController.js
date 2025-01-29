@@ -28,12 +28,7 @@ exports.registration = async (req, res) => {
 
         return res.status(201).json({
             message: "Registered successfully",
-            user: {
-                id: newUser._id,
-                name: newUser.name,
-                email: newUser.email,
-                isAdmin: newUser.isAdmin,
-            },
+            status:true
         });
     } catch (error) {
         console.error(error);
@@ -115,7 +110,7 @@ exports.userAddress = async (req, res) => {
       await user.save();
   
       res.status(200).json({
-        message: "Address updated successfully!",
+        message: "updated successfully!",
         addressDetails: user.addressDetails,
       });
     } catch (error) {

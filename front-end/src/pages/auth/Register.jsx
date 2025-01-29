@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { login, register } from '../../apiClient/endPoint';
 import { Link, useNavigate } from 'react-router-dom';
 import { setAuthToken, setCredential } from '../../helper/helper';
+import { showErrorToast, showSuccessToast } from '../../helper/toast';
 
 const Register = () => {
  const[form,setForm]=useState({
@@ -16,16 +17,12 @@ const Register = () => {
   const handleSubmit =async (e) => {
     e.preventDefault();
   const resp=await register(form)
-  if(resp.status==true){
-    // localStorage.setItem("authToken",resp.token)
-    const token= resp.token
-    const email= resp.email
-
-    setAuthToken(token)
-   
-    setCredential({token,email})
-    history("/login")
-   
+    console.log("resp",resp.data.status)
+  if(resp.data.status==true){
+    showSuccessToast(resp.data.message)
+    history("/")
+  }else{
+    showErrorToast(resp.data.message)
   }
   };
 

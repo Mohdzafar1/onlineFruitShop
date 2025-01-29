@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { deleteProductReducer, updateQuantity } from "../store/slices/cartSlice";
+import { showSuccessToast } from "../helper/toast";
 
 
 const CartSidebar = ({ handleCloseCart, onUpdateQuantity }) => {
@@ -42,6 +43,8 @@ const CartSidebar = ({ handleCloseCart, onUpdateQuantity }) => {
 
  const handleDelete=(proId)=>{
     dispatch(deleteProductReducer(proId))
+    showSuccessToast("Delete Item from cart")
+    
  }
 
 

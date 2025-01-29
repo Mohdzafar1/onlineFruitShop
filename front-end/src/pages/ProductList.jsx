@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaShoppingCart, FaPlusSquare } from 'react-icons/fa';
 import { FaSquareMinus } from 'react-icons/fa6';
 import { addToCart, deleteProductReducer, updateQuantity } from '../store/slices/cartSlice';
+import {showSuccessToast } from '../helper/toast';
 
 
 const ProductList = () => {
@@ -14,6 +15,7 @@ const ProductList = () => {
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
+    showSuccessToast("Add in cart")
   };
 
   const handleQuantityChange = (productId, newQty) => {

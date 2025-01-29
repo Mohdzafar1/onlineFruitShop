@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAllFilterProducts } from '../store/slices/productSlice';
 import CartSidebar from './CartSidebar';
+import { showSuccessToast } from '../helper/toast';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("Auth_Token");
     history("/");
+    showSuccessToast("Logout successfully")
   };
 
   const handleSearch = (e) => {
