@@ -1,9 +1,9 @@
 import axios from "axios";
 import { getAuthToken } from "../helper/helper";
 
-const clientUrl="https://online-fruit-shop-khaki.vercel.app/api/"
+const clientUrl="https://online-fruit-shop-khaki.vercel.app/"
 // const clientUrl='http://localhost:8080/api/'
-
+// const clientUrl='http://3.110.108.218:8080/api'
 
 const apiClient = axios.create({
   baseURL:clientUrl,
